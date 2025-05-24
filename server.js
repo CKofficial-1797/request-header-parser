@@ -1,33 +1,21 @@
-
 const express = require('express');
 const app = express();
 
-
-const cors = require('cors');
-app.use(cors({ optionsSuccessStatus: 200 }));
-
-
 app.use(express.static('public'));
 
-
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/views/index.html');
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/views/index.html");
 });
 
-// API endpoint
-app.get('/api/whoami', (req, res) => {
-  const ip = req.ip;
-  const language = req.get('Accept-Language');
-  const software = req.get('User-Agent');
-
+app.get("/api/whoami", (req, res) => {
   res.json({
-    ipaddress: ip,
-    language: language,
-    software: software
+    ipaddress: req.ip,
+    language: req.headers["accept-language"],
+    software: req.headers["user-agent"]
   });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
